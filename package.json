@@ -1,0 +1,14 @@
+{
+  "name": "financas-a-dois",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "dev:mobile": "pnpm --filter mobile start",
+    "build": "pnpm --filter web build",
+    "build:mobile": "pnpm --filter mobile build",
+    "db:push": "pnpm --filter web db:push",
+    "db:seed": "pnpm --filter web db:seed",
+    "db:studio": "pnpm --filter web db:studio"
+  }
+}
