@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { createInviteSchema } from '@shared/schemas';
-import { createProblem, generateUUID } from '@shared/utils';
+import { createInviteSchema } from '@/lib/shared';
+import { createProblem, generateUUID } from '@/lib/shared';
 
 export async function POST(request: NextRequest) {
   const session = await auth();

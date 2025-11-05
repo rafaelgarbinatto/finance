@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { createCategorySchema, categoryKindSchema } from '@shared/schemas';
-import { createProblem } from '@shared/utils';
+import { createCategorySchema, categoryKindSchema } from '@/lib/shared';
+import { createProblem } from '@/lib/shared';
 
 export async function GET(request: NextRequest) {
   const session = await auth();

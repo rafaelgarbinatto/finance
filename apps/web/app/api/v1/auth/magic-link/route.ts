@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signIn } from '@/lib/auth';
-import { magicLinkSchema } from '@shared/schemas';
+import { magicLinkSchema } from '@/lib/shared';
 
 export async function POST(request: NextRequest) {
   try {

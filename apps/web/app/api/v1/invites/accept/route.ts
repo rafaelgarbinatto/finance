@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { acceptInviteSchema } from '@shared/schemas';
-import { createProblem } from '@shared/utils';
+import { acceptInviteSchema } from '@/lib/shared';
+import { createProblem } from '@/lib/shared';
 
 export async function POST(request: NextRequest) {
   try {

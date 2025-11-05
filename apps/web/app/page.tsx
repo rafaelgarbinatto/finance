@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { formatCurrency } from '@shared/utils';
+import { formatCurrency } from '@/lib/shared';
 import Link from 'next/link';
 
 interface DashboardData {

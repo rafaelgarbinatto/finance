@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { formatCurrency } from '@shared/utils';
+import { formatCurrency } from '@/lib/shared';
 import Link from 'next/link';
 
 interface Transaction {

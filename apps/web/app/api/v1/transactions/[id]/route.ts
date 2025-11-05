@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { updateTransactionSchema } from '@shared/schemas';
-import { createProblem } from '@shared/utils';
+import { updateTransactionSchema } from '@/lib/shared';
+import { createProblem } from '@/lib/shared';
 
 export async function PATCH(
   request: NextRequest,
@@ -69,7 +69,7 @@ export async function PATCH(
     };
 
     if (data.type) updateData.type = data.type;
-    if (data.amount) updateData.amount = data.amount;
+    if (data.amount) updateData.amount = parseFloat(data.amount);
     if (data.category_id) updateData.categoryId = data.category_id;
     if (data.note !== undefined) updateData.note = data.note;
     if (data.date) updateData.date = new Date(data.date);

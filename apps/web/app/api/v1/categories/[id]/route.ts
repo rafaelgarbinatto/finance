@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { updateCategorySchema } from '@shared/schemas';
-import { createProblem } from '@shared/utils';
+import { updateCategorySchema } from '@/lib/shared';
+import { createProblem } from '@/lib/shared';
 
 export async function PATCH(
   request: NextRequest,

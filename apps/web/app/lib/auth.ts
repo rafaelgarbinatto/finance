@@ -3,6 +3,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import EmailProvider from 'next-auth/providers/email';
 import { PrismaClient } from '@prisma/client';
 import type { DefaultSession } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
 
 const prisma = new PrismaClient();
 
@@ -21,7 +22,7 @@ declare module 'next-auth' {
   }
 }
 
-declare module '@auth/core/jwt' {
+declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     role?: string;
@@ -42,11 +43,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
+      if (user && user.id) {
         token.id = user.id;
         token.role = user.role;
         token.familyId = user.familyId;
-      } else if (token.email) {
+      } else if (token.email && !token.id) {
         // Refresh user data from DB
         const dbUser = await prisma.user.findUnique({
           where: { email: token.email },
@@ -61,8 +62,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
+      if (session.user && token.id) {
+        session.user.id = token.id;
         session.user.role = token.role;
         session.user.familyId = token.familyId;
       }

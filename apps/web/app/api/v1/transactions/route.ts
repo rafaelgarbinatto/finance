@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { createTransactionSchema, transactionTypeSchema } from '@shared/schemas';
-import { createProblem } from '@shared/utils';
+import { createTransactionSchema, transactionTypeSchema } from '@/lib/shared';
+import { createProblem } from '@/lib/shared';
 
 export async function GET(request: NextRequest) {
   const session = await auth();
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
       data: {
         id: idempotencyKey || undefined,
         type: data.type,
-        amount: data.amount,
+        amount: parseFloat(data.amount),
         categoryId: data.category_id,
         note: data.note,
         date: data.date ? new Date(data.date) : new Date(),
