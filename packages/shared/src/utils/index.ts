@@ -56,11 +56,29 @@ export function parseMaskedCurrency(value: string): string {
 }
 
 /**
- * Format date in pt-BR
+ * Format date in pt-BR (short format: DD/MM/YYYY)
  */
 export function formatDate(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date;
-  return new Intl.DateTimeFormat('pt-BR').format(d);
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(d);
+}
+
+/**
+ * Format date with time in pt-BR (DD/MM/YYYY HH:MM)
+ */
+export function formatDateTime(date: string | Date): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(d);
 }
 
 /**

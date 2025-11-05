@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { formatCurrency } from '@/lib/shared';
+import { formatCurrency, formatDate } from '@/lib/shared';
 import Link from 'next/link';
 import { DashboardSkeleton } from './components/Skeletons';
 import { EmptyState } from './components/EmptyState';
@@ -71,19 +71,19 @@ export default function HomePage() {
         <div className="grid grid-cols-3 gap-4">
           <div className="bg-white rounded-lg shadow p-4">
             <div className="text-sm text-gray-600">Receitas</div>
-            <div className="text-xl font-bold text-green-600">
+            <div className="text-xl font-bold text-green-600 tabular-nums">
               {formatCurrency(data!.income)}
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
             <div className="text-sm text-gray-600">Despesas</div>
-            <div className="text-xl font-bold text-red-600">
+            <div className="text-xl font-bold text-red-600 tabular-nums">
               {formatCurrency(data!.expense)}
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-4">
             <div className="text-sm text-gray-600">Saldo</div>
-            <div className={`text-xl font-bold ${
+            <div className={`text-xl font-bold tabular-nums ${
               parseFloat(data!.balance) >= 0 ? 'text-green-600' : 'text-red-600'
             }`}>
               {formatCurrency(data!.balance)}
@@ -100,7 +100,7 @@ export default function HomePage() {
                 <div key={cat.name}>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm">{cat.name}</span>
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-medium tabular-nums">
                       {formatCurrency(cat.amount)} ({cat.percentage}%)
                     </span>
                   </div>
@@ -139,9 +139,9 @@ export default function HomePage() {
                   <div className="flex-1">
                     <div className="font-medium">{txn.category_name}</div>
                     {txn.note && <div className="text-sm text-gray-600">{txn.note}</div>}
-                    <div className="text-xs text-gray-500">{txn.date}</div>
+                    <div className="text-xs text-gray-500">{formatDate(txn.date)}</div>
                   </div>
-                  <div className={`font-semibold ${
+                  <div className={`font-semibold tabular-nums ${
                     txn.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
                   }`}>
                     {txn.type === 'INCOME' ? '+' : '-'} {formatCurrency(txn.amount)}

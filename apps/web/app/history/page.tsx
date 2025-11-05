@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { formatCurrency } from '@/lib/shared';
+import { formatCurrency, formatDate } from '@/lib/shared';
 import Link from 'next/link';
 import { EmptyState } from '../components/EmptyState';
 
@@ -116,9 +116,9 @@ export default function HistoryPage() {
                     {txn.note && (
                       <div className="text-sm text-gray-600">{txn.note}</div>
                     )}
-                    <div className="text-xs text-gray-500">{txn.date}</div>
+                    <div className="text-xs text-gray-500">{formatDate(txn.date)}</div>
                   </div>
-                  <div className={`font-semibold text-right ${
+                  <div className={`font-semibold text-right tabular-nums ${
                     txn.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
                   }`}>
                     {txn.type === 'INCOME' ? '+' : '-'} {formatCurrency(txn.amount)}
