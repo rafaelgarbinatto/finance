@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { parseCurrency } from '@/lib/shared';
+import { maskCurrencyInput, parseMaskedCurrency } from '@/lib/shared';
 
 interface Category {
   id: string;
@@ -62,7 +62,12 @@ export default function NewTransactionPage() {
       return;
     }
 
-    const parsedAmount = parseCurrency(amount);
+    const parsedAmount = parseMaskedCurrency(amount);
+
+    if (parseFloat(parsedAmount) <= 0) {
+      alert('O valor deve ser maior que zero');
+      return;
+    }
 
     mutation.mutate({
       type,
@@ -128,17 +133,24 @@ export default function NewTransactionPage() {
           {/* Amount */}
           <div>
             <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
-              Valor *
+              Valor * (R$)
             </label>
             <input
               type="text"
               id="amount"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => {
+                const masked = maskCurrencyInput(e.target.value);
+                setAmount(masked);
+              }}
               placeholder="0,00"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              inputMode="decimal"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
               required
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Digite apenas números (ex: 1234 → 12,34)
+            </p>
           </div>
 
           {/* Category */}

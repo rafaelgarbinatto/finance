@@ -22,6 +22,40 @@ export function parseCurrency(value: string): string {
 }
 
 /**
+ * Mask input value as BRL currency (R$ 1.234,56)
+ * Accepts input like "123456" and formats to "1.234,56"
+ */
+export function maskCurrencyInput(value: string): string {
+  // Remove all non-digits
+  let numbers = value.replace(/\D/g, '');
+  
+  // If empty, return empty
+  if (!numbers) return '';
+  
+  // Convert to number (cents)
+  const cents = parseInt(numbers, 10);
+  
+  // Format with decimal places
+  const formatted = (cents / 100).toFixed(2);
+  
+  // Replace dot with comma and add thousand separators
+  return formatted
+    .replace('.', ',')
+    .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+/**
+ * Parse masked BRL input to decimal string for API
+ */
+export function parseMaskedCurrency(value: string): string {
+  // Remove thousands separator and replace comma with dot
+  const cleaned = value.replace(/\./g, '').replace(',', '.');
+  const num = parseFloat(cleaned);
+  if (isNaN(num) || num <= 0) return '0.00';
+  return num.toFixed(2);
+}
+
+/**
  * Format date in pt-BR
  */
 export function formatDate(date: string | Date): string {

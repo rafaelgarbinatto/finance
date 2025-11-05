@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { formatCurrency } from '@/lib/shared';
 import Link from 'next/link';
+import { DashboardSkeleton } from './components/Skeletons';
 
 interface DashboardData {
   income: string;
@@ -36,13 +37,7 @@ export default function HomePage() {
   });
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center py-8">Carregando...</div>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   if (error) {
