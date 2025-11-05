@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
   let expense = 0;
   const categoryTotals: { [key: string]: { name: string; amount: number } } = {};
 
-  transactions.forEach((t) => {
+  transactions.forEach((t: any) => {
     const amount = parseFloat(t.amount.toString());
     if (t.type === 'INCOME') {
       income += amount;
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
     }));
 
   // Get 10 most recent transactions
-  const recent = transactions.slice(0, 10).map((t) => ({
+  const recent = transactions.slice(0, 10).map((t: any) => ({
     id: t.id,
     type: t.type,
     amount: t.amount.toFixed(2),

@@ -84,8 +84,8 @@ export default function NewTransactionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-blue-600 text-white p-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="bg-blue-600 dark:bg-blue-700 text-white p-4">
         <div className="max-w-4xl mx-auto flex items-center">
           <button
             onClick={() => router.back()}
@@ -98,10 +98,10 @@ export default function NewTransactionPage() {
       </div>
 
       <div className="max-w-4xl mx-auto p-4">
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-4">
           {/* Type Toggle */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tipo
             </label>
             <div className="flex gap-2">
@@ -113,8 +113,8 @@ export default function NewTransactionPage() {
                 }}
                 className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
                   type === 'EXPENSE'
-                    ? 'bg-red-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-red-600 dark:bg-red-500 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 Despesa
@@ -127,8 +127,8 @@ export default function NewTransactionPage() {
                 }}
                 className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
                   type === 'INCOME'
-                    ? 'bg-green-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-green-600 dark:bg-green-500 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 Receita
@@ -138,7 +138,7 @@ export default function NewTransactionPage() {
 
           {/* Amount */}
           <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Valor * (R$)
             </label>
             <input
@@ -151,27 +151,27 @@ export default function NewTransactionPage() {
               }}
               placeholder="0,00"
               inputMode="decimal"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
               required
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Digite apenas números (ex: 1234 → 12,34)
             </p>
           </div>
 
           {/* Category */}
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Categoria *
             </label>
             {isLoading ? (
-              <div className="text-gray-500">Carregando categorias...</div>
+              <div className="text-gray-500 dark:text-gray-400">Carregando categorias...</div>
             ) : (
               <select
                 id="category"
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Selecione uma categoria</option>
@@ -186,7 +186,7 @@ export default function NewTransactionPage() {
 
           {/* Note */}
           <div>
-            <label htmlFor="note" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="note" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Nota (opcional)
             </label>
             <input
@@ -195,7 +195,7 @@ export default function NewTransactionPage() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Adicione uma nota..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
@@ -203,7 +203,7 @@ export default function NewTransactionPage() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 dark:bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed"
           >
             {mutation.isPending ? 'Salvando...' : 'Salvar'}
           </button>
