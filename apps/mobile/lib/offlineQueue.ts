@@ -81,7 +81,7 @@ export async function syncPendingTransactions(apiBaseUrl: string): Promise<void>
         }),
       });
 
-      if (response.ok || response.status === 200) {
+      if (response.ok) {
         // Successfully synced, don't add back to queue
         console.log('Synced transaction:', item.tempId);
       } else {
@@ -100,7 +100,7 @@ export async function syncPendingTransactions(apiBaseUrl: string): Promise<void>
   await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(results));
 }
 
-// Clear all pending transactions
+// Clear all pending transactions (useful for testing or manual cleanup)
 export async function clearPendingTransactions(): Promise<void> {
   await AsyncStorage.removeItem(QUEUE_KEY);
 }
