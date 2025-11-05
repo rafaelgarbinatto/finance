@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { formatCurrency } from '@/lib/shared';
 import Link from 'next/link';
 import { DashboardSkeleton } from './components/Skeletons';
+import { EmptyState } from './components/EmptyState';
 
 interface DashboardData {
   income: string;
@@ -123,22 +124,32 @@ export default function HomePage() {
               Ver todos
             </Link>
           </div>
-          <div className="space-y-2">
-            {data!.recent.map((txn) => (
-              <div key={txn.id} className="flex justify-between items-start py-2 border-b last:border-0">
-                <div className="flex-1">
-                  <div className="font-medium">{txn.category_name}</div>
-                  {txn.note && <div className="text-sm text-gray-600">{txn.note}</div>}
-                  <div className="text-xs text-gray-500">{txn.date}</div>
+          {data!.recent.length === 0 ? (
+            <EmptyState
+              icon="💰"
+              title="Nenhuma transação ainda"
+              description="Comece adicionando seu primeiro lançamento"
+              actionLabel="Adicionar Lançamento"
+              actionHref="/new"
+            />
+          ) : (
+            <div className="space-y-2">
+              {data!.recent.map((txn) => (
+                <div key={txn.id} className="flex justify-between items-start py-2 border-b last:border-0">
+                  <div className="flex-1">
+                    <div className="font-medium">{txn.category_name}</div>
+                    {txn.note && <div className="text-sm text-gray-600">{txn.note}</div>}
+                    <div className="text-xs text-gray-500">{txn.date}</div>
+                  </div>
+                  <div className={`font-semibold ${
+                    txn.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {txn.type === 'INCOME' ? '+' : '-'} {formatCurrency(txn.amount)}
+                  </div>
                 </div>
-                <div className={`font-semibold ${
-                  txn.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {txn.type === 'INCOME' ? '+' : '-'} {formatCurrency(txn.amount)}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

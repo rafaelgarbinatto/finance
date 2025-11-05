@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { formatCurrency } from '@/lib/shared';
 import Link from 'next/link';
+import { EmptyState } from '../components/EmptyState';
 
 interface Transaction {
   id: string;
@@ -97,9 +98,13 @@ export default function HistoryPage() {
           )}
 
           {data && data.items.length === 0 && (
-            <div className="p-8 text-center text-gray-500">
-              Nenhuma transação encontrada
-            </div>
+            <EmptyState
+              icon="📊"
+              title="Nenhuma transação encontrada"
+              description="Ajuste os filtros ou adicione uma nova transação"
+              actionLabel="Adicionar Lançamento"
+              actionHref="/new"
+            />
           )}
 
           {data && data.items.length > 0 && (

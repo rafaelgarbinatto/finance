@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { maskCurrencyInput, parseMaskedCurrency } from '@/lib/shared';
+import { useToast } from '../components/Toast';
 
 interface Category {
   id: string;
@@ -35,6 +36,7 @@ async function createTransaction(data: any) {
 export default function NewTransactionPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
 
   const [type, setType] = useState<'INCOME' | 'EXPENSE'>('EXPENSE');
   const [amount, setAmount] = useState('');
@@ -50,7 +52,11 @@ export default function NewTransactionPage() {
     mutationFn: createTransaction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      addToast('Lançamento adicionado com sucesso!', 'success');
       router.push('/');
+    },
+    onError: (error: Error) => {
+      addToast(error.message || 'Erro ao adicionar lançamento', 'error');
     },
   });
 
@@ -58,14 +64,14 @@ export default function NewTransactionPage() {
     e.preventDefault();
 
     if (!amount || !categoryId) {
-      alert('Por favor, preencha todos os campos obrigatórios');
+      addToast('Por favor, preencha todos os campos obrigatórios', 'warning');
       return;
     }
 
     const parsedAmount = parseMaskedCurrency(amount);
 
     if (parseFloat(parsedAmount) <= 0) {
-      alert('O valor deve ser maior que zero');
+      addToast('O valor deve ser maior que zero', 'warning');
       return;
     }
 
@@ -201,12 +207,6 @@ export default function NewTransactionPage() {
           >
             {mutation.isPending ? 'Salvando...' : 'Salvar'}
           </button>
-
-          {mutation.isError && (
-            <div className="text-red-600 text-sm text-center">
-              {mutation.error.message}
-            </div>
-          )}
         </form>
       </div>
     </div>
