@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
   const nextCursor = hasMore ? items[items.length - 1].id : null;
 
   const response = {
-    items: items.map((t) => ({
+    items: items.map((t: any) => ({
       id: t.id,
       type: t.type,
       amount: t.amount.toFixed(2),

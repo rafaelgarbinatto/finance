@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     orderBy: { name: 'asc' },
   });
 
-  const response = categories.map((c) => ({
+  const response = categories.map((c: { id: string; name: string; kind: string; familyId: string; version: number }) => ({
     id: c.id,
     name: c.name,
     kind: c.kind,

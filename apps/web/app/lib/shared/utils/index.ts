@@ -22,11 +22,63 @@ export function parseCurrency(value: string): string {
 }
 
 /**
- * Format date in pt-BR
+ * Mask input value as BRL currency (R$ 1.234,56)
+ * Accepts input like "123456" and formats to "1.234,56"
+ */
+export function maskCurrencyInput(value: string): string {
+  // Remove all non-digits
+  let numbers = value.replace(/\D/g, '');
+  
+  // If empty, return empty
+  if (!numbers) return '';
+  
+  // Convert to number (cents)
+  const cents = parseInt(numbers, 10);
+  
+  // Format with decimal places
+  const formatted = (cents / 100).toFixed(2);
+  
+  // Replace dot with comma and add thousand separators
+  return formatted
+    .replace('.', ',')
+    .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+/**
+ * Parse masked BRL input to decimal string for API
+ */
+export function parseMaskedCurrency(value: string): string {
+  // Remove thousands separator and replace comma with dot
+  const cleaned = value.replace(/\./g, '').replace(',', '.');
+  const num = parseFloat(cleaned);
+  if (isNaN(num) || num <= 0) return '0.00';
+  return num.toFixed(2);
+}
+
+/**
+ * Format date in pt-BR (short format: DD/MM/YYYY)
  */
 export function formatDate(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date;
-  return new Intl.DateTimeFormat('pt-BR').format(d);
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(d);
+}
+
+/**
+ * Format date with time in pt-BR (DD/MM/YYYY HH:MM)
+ */
+export function formatDateTime(date: string | Date): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(d);
 }
 
 /**
