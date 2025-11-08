@@ -1,0 +1,25 @@
+{
+  "name": "financas-a-dois",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Finanças a Dois - Gestão financeira compartilhada",
+  "scripts": {
+    "dev": "pnpm --filter \"./apps/*\" dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:mobile": "pnpm --filter mobile start",
+    "build": "pnpm --filter shared build && pnpm --filter web build",
+    "build:web": "pnpm --filter web build",
+    "build:mobile": "pnpm --filter mobile --",
+    "lint": "pnpm --filter \"./apps/*\" --filter \"./packages/*\" lint",
+    "db:migrate": "pnpm --filter web db:migrate",
+    "db:seed": "pnpm --filter web db:seed",
+    "db:studio": "pnpm --filter web db:studio"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

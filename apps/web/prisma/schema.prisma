@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  role          String? // OWNER or PARTNER
+  familyId      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  family       Family?       @relation(fields: [familyId], references: [id], onDelete: SetNull)
+  accounts     Account[]
+  sessions     Session[]
+  transactions Transaction[]
+
+  @@index([familyId])
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Family {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users        User[]
+  categories   Category[]
+  transactions Transaction[]
+  settings     Setting[]
+  invites      Invite[]
+
+  @@map("families")
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String
+  value     String
+  familyId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  family Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+
+  @@unique([familyId, key])
+  @@index([familyId])
+  @@map("settings")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  kind      String // INCOME or EXPENSE
+  familyId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  family       Family        @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@unique([familyId, name, kind])
+  @@index([familyId])
+  @@index([familyId, kind])
+  @@map("categories")
+}
+
+model Transaction {
+  id         String   @id @default(cuid())
+  amount     Decimal  @db.Decimal(12, 2)
+  kind       String // INCOME or EXPENSE
+  categoryId String
+  note       String?
+  date       DateTime
+  userId     String
+  familyId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  family   Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+
+  @@index([familyId])
+  @@index([familyId, date])
+  @@index([familyId, kind])
+  @@index([categoryId])
+  @@index([userId])
+  @@map("transactions")
+}
+
+model Invite {
+  id         String    @id @default(cuid())
+  email      String
+  role       String // OWNER or PARTNER
+  familyId   String
+  token      String    @unique
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  family Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+
+  @@index([familyId])
+  @@index([token])
+  @@map("invites")
+}
