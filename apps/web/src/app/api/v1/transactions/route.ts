@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createTransactionSchema, transactionListQuerySchema } from '@financas-a-dois/shared';
 import { requireFamily, handleApiError, getIdempotencyKey } from '@/lib/api-helpers';
 import { prisma } from '@/lib/prisma';
-import { Decimal } from '@prisma/client/runtime/library';
-import { decimalToString } from '@financas-a-dois/shared';
+import { formatCurrency } from '@financas-a-dois/shared';
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,7 +44,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       data: data.map(t => ({
         id: t.id,
-        amount: decimalToString(t.amount),
+        amount: formatCurrency(t.amount),
         kind: t.kind,
         categoryId: t.categoryId,
         note: t.note,
@@ -77,7 +76,7 @@ export async function POST(request: NextRequest) {
 
     const transaction = await prisma.transaction.create({
       data: {
-        amount: new Decimal(data.amount),
+        amount: parseFloat(data.amount),
         kind: data.kind,
         categoryId: data.categoryId,
         note: data.note || null,
@@ -99,7 +98,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         id: transaction.id,
-        amount: decimalToString(transaction.amount),
+        amount: formatCurrency(transaction.amount),
         kind: transaction.kind,
         categoryId: transaction.categoryId,
         note: transaction.note,

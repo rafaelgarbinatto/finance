@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { updateTransactionSchema } from '@financas-a-dois/shared';
 import { requireFamily, handleApiError, ApiError, getIfMatch } from '@/lib/api-helpers';
 import { prisma } from '@/lib/prisma';
-import { Decimal } from '@prisma/client/runtime/library';
-import { decimalToString } from '@financas-a-dois/shared';
+import { formatCurrency } from '@financas-a-dois/shared';
 
 export async function GET(
   request: NextRequest,
@@ -80,7 +79,7 @@ export async function PATCH(
     const transaction = await prisma.transaction.update({
       where: { id: params.id },
       data: {
-        ...(data.amount && { amount: new Decimal(data.amount) }),
+        ...(data.amount && { amount: parseFloat(data.amount) }),
         ...(data.kind && { kind: data.kind }),
         ...(data.categoryId && { categoryId: data.categoryId }),
         ...(data.note !== undefined && { note: data.note || null }),
@@ -99,7 +98,7 @@ export async function PATCH(
 
     return NextResponse.json({
       id: transaction.id,
-      amount: decimalToString(transaction.amount),
+      amount: formatCurrency(transaction.amount),
       kind: transaction.kind,
       categoryId: transaction.categoryId,
       note: transaction.note,

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { onboardingActivateSchema } from '@financas-a-dois/shared';
 import { requireAuth, handleApiError, ApiError } from '@/lib/api-helpers';
 import { prisma } from '@/lib/prisma';
-import { Decimal } from '@prisma/client/runtime/library';
 
 export async function POST(request: NextRequest) {
   try {
@@ -111,7 +110,7 @@ export async function POST(request: NextRequest) {
     const transactions = [
       // Income
       {
-        amount: new Decimal('5500.00'),
+        amount: 5500.00,
         kind: 'INCOME',
         categoryId: incomeCategories[0].id,
         note: 'Salário mensal',
@@ -120,7 +119,7 @@ export async function POST(request: NextRequest) {
         familyId: family.id,
       },
       {
-        amount: new Decimal('1200.00'),
+        amount: 1200.00,
         kind: 'INCOME',
         categoryId: incomeCategories[1].id,
         note: 'Projeto freelance',
@@ -130,7 +129,7 @@ export async function POST(request: NextRequest) {
       },
       // Expenses
       {
-        amount: new Decimal('1200.00'),
+        amount: 1200.00,
         kind: 'EXPENSE',
         categoryId: expenseCategories[1].id,
         note: 'Aluguel',
@@ -139,7 +138,7 @@ export async function POST(request: NextRequest) {
         familyId: family.id,
       },
       {
-        amount: new Decimal('450.50'),
+        amount: 450.50,
         kind: 'EXPENSE',
         categoryId: expenseCategories[0].id,
         note: 'Compras do mês',
@@ -148,7 +147,7 @@ export async function POST(request: NextRequest) {
         familyId: family.id,
       },
       {
-        amount: new Decimal('200.00'),
+        amount: 200.00,
         kind: 'EXPENSE',
         categoryId: expenseCategories[2].id,
         note: 'Gasolina',
@@ -157,7 +156,7 @@ export async function POST(request: NextRequest) {
         familyId: family.id,
       },
       {
-        amount: new Decimal('150.00'),
+        amount: 150.00,
         kind: 'EXPENSE',
         categoryId: expenseCategories[4].id,
         note: 'Cinema e restaurante',
@@ -166,7 +165,7 @@ export async function POST(request: NextRequest) {
         familyId: family.id,
       },
       {
-        amount: new Decimal('80.00'),
+        amount: 80.00,
         kind: 'EXPENSE',
         categoryId: expenseCategories[3].id,
         note: 'Farmácia',
@@ -175,7 +174,7 @@ export async function POST(request: NextRequest) {
         familyId: family.id,
       },
       {
-        amount: new Decimal('320.00'),
+        amount: 320.00,
         kind: 'EXPENSE',
         categoryId: expenseCategories[0].id,
         note: 'Restaurantes',

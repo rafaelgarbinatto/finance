@@ -78,7 +78,7 @@ CREATE TABLE "categories" (
 -- CreateTable
 CREATE TABLE "transactions" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "amount" DECIMAL(12, 2) NOT NULL,
+    "amount" REAL NOT NULL,
     "kind" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
     "note" TEXT,

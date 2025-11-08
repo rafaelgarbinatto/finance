@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireFamily, handleApiError } from '@/lib/api-helpers';
 import { prisma } from '@/lib/prisma';
-import { decimalToString } from '@financas-a-dois/shared';
-import { Decimal } from '@prisma/client/runtime/library';
+import { formatCurrency } from '@financas-a-dois/shared';
 
 export async function GET(request: NextRequest) {
   try {
@@ -32,22 +31,22 @@ export async function GET(request: NextRequest) {
     });
 
     // Calculate aggregates
-    let totalIncome = new Decimal(0);
-    let totalExpense = new Decimal(0);
+    let totalIncome = 0;
+    let totalExpense = 0;
 
-    const categoryTotals = new Map<string, { name: string; amount: Decimal }>();
+    const categoryTotals = new Map<string, { name: string; amount: number }>();
 
     for (const transaction of transactions) {
       if (transaction.kind === 'INCOME') {
-        totalIncome = totalIncome.add(transaction.amount);
+        totalIncome += transaction.amount;
       } else {
-        totalExpense = totalExpense.add(transaction.amount);
+        totalExpense += transaction.amount;
         
         // Track expense categories for top categories
         const key = transaction.categoryId;
         const existing = categoryTotals.get(key);
         if (existing) {
-          existing.amount = existing.amount.add(transaction.amount);
+          existing.amount += transaction.amount;
         } else {
           categoryTotals.set(key, {
             name: transaction.category.name,
@@ -57,7 +56,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const balance = totalIncome.sub(totalExpense);
+    const balance = totalIncome - totalExpense;
 
     // Get top 5 expense categories
     const topCategories = Array.from(categoryTotals.entries())
@@ -65,25 +64,25 @@ export async function GET(request: NextRequest) {
         name: data.name,
         amount: data.amount,
       }))
-      .sort((a, b) => b.amount.comparedTo(a.amount))
+      .sort((a, b) => b.amount - a.amount)
       .slice(0, 5)
       .map(cat => ({
         name: cat.name,
-        amount: decimalToString(cat.amount),
-        percentage: totalExpense.isZero() ? 0 : cat.amount.div(totalExpense).mul(100).toNumber(),
+        amount: formatCurrency(cat.amount),
+        percentage: totalExpense === 0 ? 0 : (cat.amount / totalExpense) * 100,
       }));
 
     // Get recent 10 transactions
     const recentTransactions = transactions.slice(0, 10);
 
     return NextResponse.json({
-      income: decimalToString(totalIncome),
-      expense: decimalToString(totalExpense),
-      balance: decimalToString(balance),
+      income: formatCurrency(totalIncome),
+      expense: formatCurrency(totalExpense),
+      balance: formatCurrency(balance),
       topCategories,
       recentTransactions: recentTransactions.map(t => ({
         id: t.id,
-        amount: decimalToString(t.amount),
+        amount: formatCurrency(t.amount),
         kind: t.kind,
         categoryId: t.categoryId,
         note: t.note,

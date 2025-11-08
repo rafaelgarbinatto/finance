@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { Decimal } from '@prisma/client/runtime/library';
 
 const prisma = new PrismaClient();
 
@@ -106,7 +105,7 @@ async function main() {
   // Create income transactions for current month
   const incomeTransactions = [
     {
-      amount: new Decimal('5500.00'),
+      amount: 5500.00,
       kind: 'INCOME',
       categoryId: incomeCategories[0].id, // Salário
       note: 'Salário mensal',
@@ -115,7 +114,7 @@ async function main() {
       familyId: family.id,
     },
     {
-      amount: new Decimal('1200.00'),
+      amount: 1200.00,
       kind: 'INCOME',
       categoryId: incomeCategories[1].id, // Freelance
       note: 'Projeto freelance',
@@ -128,7 +127,7 @@ async function main() {
   // Create expense transactions for current month
   const expenseTransactions = [
     {
-      amount: new Decimal('1200.00'),
+      amount: 1200.00,
       kind: 'EXPENSE',
       categoryId: expenseCategories[1].id, // Moradia
       note: 'Aluguel',
@@ -137,7 +136,7 @@ async function main() {
       familyId: family.id,
     },
     {
-      amount: new Decimal('450.50'),
+      amount: 450.50,
       kind: 'EXPENSE',
       categoryId: expenseCategories[0].id, // Alimentação
       note: 'Compras do mês',
@@ -146,7 +145,7 @@ async function main() {
       familyId: family.id,
     },
     {
-      amount: new Decimal('200.00'),
+      amount: 200.00,
       kind: 'EXPENSE',
       categoryId: expenseCategories[2].id, // Transporte
       note: 'Gasolina',
@@ -155,7 +154,7 @@ async function main() {
       familyId: family.id,
     },
     {
-      amount: new Decimal('150.00'),
+      amount: 150.00,
       kind: 'EXPENSE',
       categoryId: expenseCategories[4].id, // Lazer
       note: 'Cinema e restaurante',
@@ -164,7 +163,7 @@ async function main() {
       familyId: family.id,
     },
     {
-      amount: new Decimal('80.00'),
+      amount: 80.00,
       kind: 'EXPENSE',
       categoryId: expenseCategories[3].id, // Saúde
       note: 'Farmácia',
@@ -173,7 +172,7 @@ async function main() {
       familyId: family.id,
     },
     {
-      amount: new Decimal('320.00'),
+      amount: 320.00,
       kind: 'EXPENSE',
       categoryId: expenseCategories[0].id, // Alimentação
       note: 'Restaurantes',

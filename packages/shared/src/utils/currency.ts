@@ -24,13 +24,4 @@ export function formatCurrencyDisplay(amount: number | string): string {
   }).format(num);
 }
 
-/**
- * Convert Decimal to string with 2 decimal places
- */
-export function decimalToString(decimal: any): string {
-  if (decimal === null || decimal === undefined) {
-    return '0.00';
-  }
-  const num = typeof decimal.toNumber === 'function' ? decimal.toNumber() : parseFloat(String(decimal));
-  return formatCurrency(num);
-}
+
